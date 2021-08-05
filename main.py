@@ -5,6 +5,7 @@ from receipt_class import receipt
 import google_sheets
 import os
 import config
+import time
 
 import telebot
 from telebot import types

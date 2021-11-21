@@ -56,7 +56,7 @@ def upload(receipt):
     inserted_values = int(values[0][0])
 
     date = receipt.date.strftime('%d/%m/%Y')
-    timestamp = receipt.timestamp.strftime("%m/%d/%Y, %H:%M:%S")
+    timestamp = receipt.timestamp.strftime("%d/%m/%Y, %H:%M:%S")
 
     aoa = [[timestamp, date, receipt.cause, receipt.purpose, receipt.user_id, receipt.username, receipt.js_name, receipt.first_name, receipt.last_name, receipt.total, receipt.picture]]
 

@@ -1,6 +1,0 @@
-#save all credentials here
-
-API_TOKEN = '1198066406:AAFbx9-V3e0T_m3luDrpQzu_rqaEB5yFlaA'
-
-SAMPLE_SPREADSHEET_ID = '1fEhtczRY1JGqEDY1ogDU0u4AJu4Tj4knv4vF9kQLr38'
-DRIVE_FOLDER = '1-Go1DdNwP97AqR-l9uUUVsROqFBX5S2h'

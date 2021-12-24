@@ -6,6 +6,7 @@ import google_sheets
 import os
 import config
 import time
+import socket
 
 import telebot
 from telebot import types
@@ -159,7 +160,7 @@ def send_user_receipts(message):
                 parse_mode= 'Markdown',
                 chat_id=message.chat.id,
                 text="Du hast *" + str(len(values)) + " Quittungen* abgegeben\n"\
-                    "und wirst " + str(total_value) + " CHF erhalten\n"
+                    "und wirst " + str(round(total_value,2)) + " CHF erhalten\n"
             )
 
 def get_js_name(message):
@@ -367,7 +368,7 @@ def send_all_receipts(message):
                 parse_mode= 'Markdown',
                 chat_id= message.chat.id,
                 text="Es wurden *" + str(len(values)) + " Quittungen* abgegeben.\n"\
-                    "Gesamtbetrag: " + str(total_value) + " CHF\n"
+                    "Gesamtbetrag: " + str(round(total_value,2)) + " CHF\n"
             )
 
 @bot.message_handler(commands=["allreceipts"])
@@ -388,6 +389,34 @@ def check_other_messages(message):
         )
         bot.register_next_step_handler(msg, get_js_name)
 
+def udpsender(message):
+    if check_cancel(message):
+        bot.reply_to(message, 'Abbruch, Daten gelöscht!')
+    else:
+        try:
+            msgFromClient = str(message.text)
+            bytesToSend         = str.encode(msgFromClient)
+            serverAddressPort   = (HOSTNAME, PORT)
+            bufferSize          = 1024
+            # Create a UDP socket at client side
+            UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+            # Send to server using created UDP socket
+            UDPClientSocket.sendto(bytesToSend, serverAddressPort)
+            bot.register_next_step_handler(message, udpsender)
+        except Exception as e:
+            print(e)
+            bot.reply_to(message, 'Ein Fehler ist aufgetaucht, benachrichtige Hornet falls das Problem weiterhin besteht!')
+    
+@bot.message_handler(commands=["wemos"])
+def check_other_messages(message):
+
+    bot.register_next_step_handler(message, udpsender)
+
+while True:
+    try:
+        bot.polling(none_stop=True)
+    except Exception as e:
+        time.sleep(15)
 
 while True:
     try:

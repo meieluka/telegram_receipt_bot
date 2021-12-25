@@ -396,13 +396,17 @@ def udpsender(message):
         try:
             msgFromClient = str(message.text)
             bytesToSend         = str.encode(msgFromClient)
-            serverAddressPort   = (HOSTNAME, PORT)
+            serverAddressPort   = (config.HOSTNAME, config.PORT)
             bufferSize          = 1024
             # Create a UDP socket at client side
             UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
             # Send to server using created UDP socket
             UDPClientSocket.sendto(bytesToSend, serverAddressPort)
-            bot.register_next_step_handler(message, udpsender)
+            msg = bot.send_message(
+                chat_id= message.chat.id,
+                text="Daten an Wemos geschickt!",
+            )
+            bot.register_next_step_handler(msg, udpsender)
         except Exception as e:
             print(e)
             bot.reply_to(message, 'Ein Fehler ist aufgetaucht, benachrichtige Hornet falls das Problem weiterhin besteht!')

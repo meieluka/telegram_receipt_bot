@@ -1,6 +1,7 @@
 #!/bin/bash
 
 python3 main.py 1>stdout.out 2>stderr.out &
+# for command line use: nohup python3 main.py 1>stdout.out 2>stderr.out &
 
 while true
 do
